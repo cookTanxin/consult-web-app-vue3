@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "pinia": "^2.1.7",
+    "vant": "^4.7.3",
     "vue": "^3.3.4",
     "vue-router": "^4.2.5"
   },
