@@ -1,4 +1,4 @@
 <script setup lang="ts"></script>
 <template>
-  <div>app container</div>
+  <div>快去赚钱啊</div>
 </template>
