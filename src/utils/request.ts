@@ -67,7 +67,7 @@ const request = <T>(
   method: Method = 'GET',
   submitData?: object
 ) => {
-  return instance.request<ResData<T>>({
+  return instance.request<any, ResData<T>>({
     url,
     method,
     [method.toUpperCase() === 'GET' ? 'params' : 'data']: submitData
