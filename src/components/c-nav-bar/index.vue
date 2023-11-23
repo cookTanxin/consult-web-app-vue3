@@ -4,6 +4,7 @@
       :title="title"
       left-arrow
       fixed
+      :border="border"
       :right-text="rightText"
       @click-left="onClickLeft"
       @click-right="onClickRight"
@@ -18,6 +19,7 @@ import { useRouter } from 'vue-router'
 type Props = {
   title?: string
   rightText?: string
+  border?: boolean
 }
 // 定义一个事件类型 emits
 interface Emits {
@@ -50,14 +52,17 @@ const onClickRight = () => {
 </script>
 
 <style scoped lang="scss">
-:deep() {
-  .van-nav-bar {
-    &__arrow {
-      font-size: 18px;
-      color: var(--cp-text1);
-    }
-    &__text {
-      font-size: 15px;
+.c-nav-bar {
+  height: 50px;
+  :deep() {
+    .van-nav-bar {
+      &__arrow {
+        font-size: 18px;
+        color: var(--cp-text1);
+      }
+      &__text {
+        font-size: 15px;
+      }
     }
   }
 }

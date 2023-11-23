@@ -3,6 +3,9 @@ import App from './App.vue'
 import router from './router'
 // pinia
 import pinia from '@/stores/index'
+// 移动端调试工具
+import eruda from 'eruda'
+eruda.init()
 // vant 样式
 import 'vant/lib/index.css'
 // style
