@@ -1,5 +1,4 @@
 import { fileURLToPath, URL } from 'node:url'
-import path from 'path'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
@@ -12,7 +11,7 @@ import { VantResolver } from 'unplugin-vue-components/resolvers'
 import vueSetupExtend from 'vite-plugin-vue-setup-extend-plus'
 // 处理svg
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
-
+import path from 'path'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
@@ -25,6 +24,7 @@ export default defineConfig({
     }),
     createSvgIconsPlugin({
       // 指定需要缓存的图标文件夹
+      // eslint-disable-next-line no-undef
       iconDirs: [path.resolve(process.cwd(), 'src/icons')]
     })
   ],
