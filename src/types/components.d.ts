@@ -1,8 +1,11 @@
 // 自定义导航组件
-import CnavBar from '@/components/c-nav-bar/index.vue'
+import CNavBar from '@/components/CNavBar/index.vue'
+// 自定义图标
+import CIcon from '@/components/CIcon/index.vue'
 
 declare module 'vue' {
   interface GlobalComponents {
-    CnavBar: typeof CnavBar
+    CNavBar: typeof CNavBar
+    CIcon: typeof CIcon
   }
 }

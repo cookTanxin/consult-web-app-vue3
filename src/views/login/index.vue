@@ -7,55 +7,85 @@
       title="登录"
       :border="false"
     ></c-nav-bar>
-    <!-- 登录区域 -->
-    <div class="login-form-area">
-      <div class="login-form-area-head">
-        <h3 class="login-form-area-head-title">密码登录</h3>
-        <div class="login-form-area-head-method">
-          <span>手机验证码登录</span>
-          <van-icon name="arrow" color="#515256" />
+    <div class="login-content">
+      <!-- 登录区域 -->
+      <div class="login-form-area">
+        <div class="login-form-area-head">
+          <h3 class="login-form-area-head-title">
+            {{ isPassword ? '密码登录' : '短信验证码登录' }}
+          </h3>
+          <div class="login-form-area-head-method" @click="changeLoginType">
+            <span>{{ isPassword ? '手机验证码登录' : '密码登录' }}</span>
+            <van-icon name="arrow" color="#515256" />
+          </div>
+        </div>
+        <!-- 登录表单区域 -->
+        <div class="login-form-content">
+          <van-form @submit="onSubmit" ref="vantForm">
+            <van-field
+              name="mobile"
+              v-model="formData.mobile"
+              type="tel"
+              :rules="mobileRule"
+              placeholder="请输入手机号"
+            />
+            <van-field
+              v-if="isPassword"
+              v-model="formData.password"
+              type="password"
+              :rules="passwordRule"
+              placeholder="请输入密码"
+            />
+            <van-field
+              v-else
+              v-model="formData.code"
+              placeholder="请输入验证码"
+            >
+              <template #button>
+                <span
+                  @click="sendMessageCode"
+                  :class="countDownNum > 0 ? 'countdownActive' : ''"
+                >
+                  {{
+                    countDownNum > 0 ? `${countDownNum}s后再获取` : '获取验证码'
+                  }}</span
+                >
+              </template>
+            </van-field>
+            <!-- 隐私协议 -->
+            <div class="user-agreement">
+              <van-checkbox icon-size="16" v-model="formData.useragreement">
+                <div class="user-agreement-content">
+                  <span class="cp-text-black">我已同意</span>
+                  <span class="cp-text-green">用户协议</span>
+                  <span class="cp-text-black">及</span>
+                  <span class="cp-text-green">隐私协议</span>
+                </div>
+              </van-checkbox>
+            </div>
+            <!-- 登录按钮 -->
+            <div class="login-submit-button">
+              <van-button
+                round
+                block
+                type="primary"
+                native-type="submit"
+                :loading="loginLoading"
+                :disabled="loginLoading"
+                loading-text="登录中..."
+              >
+                登录
+              </van-button>
+            </div>
+          </van-form>
         </div>
       </div>
-      <!-- 登录表单区域 -->
-      <div class="login-form-content">
-        <van-form @submit="onSubmit">
-          <van-field
-            v-model="formData.mobile"
-            type="tel"
-            :rules="mobileRule"
-            placeholder="请输入手机号"
-          />
-          <van-field
-            v-model="formData.password"
-            type="password"
-            :rules="passwordRule"
-            placeholder="请输入密码"
-          />
-          <!-- 隐私协议 -->
-          <div class="user-agreement">
-            <van-checkbox icon-size="16" v-model="formData.useragreement">
-              <div class="user-agreement-content">
-                <span class="cp-text-black">我已同意</span>
-                <span class="cp-text-green">用户协议</span>
-                <span class="cp-text-black">及</span>
-                <span class="cp-text-green">隐私协议</span>
-              </div>
-            </van-checkbox>
-          </div>
-          <!-- 登录按钮 -->
-          <div class="login-submit-button">
-            <van-button
-              round
-              block
-              type="primary"
-              native-type="submit"
-              :loading="loginLoading"
-              loading-text="登录中..."
-            >
-              登录
-            </van-button>
-          </div>
-        </van-form>
+      <!-- 第三方登录 -->
+      <div class="login-type">
+        <div class="login-type-line">
+          <span>第三方登录</span>
+        </div>
+        <c-icon iconname="consult-alipay" :size="35"></c-icon>
       </div>
     </div>
   </div>
@@ -63,13 +93,13 @@
 
 <script setup lang="ts" name="Login">
 // vue
-import { ref } from 'vue'
+import { ref, onUnmounted } from 'vue'
 // 导入表单验证规则
 import { mobileRule, passwordRule } from '@/utils/rules'
 // vant
-import { showToast, showSuccessToast } from 'vant'
+import { showToast, showSuccessToast, type FormInstance } from 'vant'
 // api
-import { loginPassword } from '@/services/public'
+import { loginPassword, getMobileCode, loginCode } from '@/services/public'
 // store
 import { useUserStore } from '@/stores'
 // 登录按钮是否加载
@@ -82,6 +112,8 @@ import { useRoute, useRouter } from 'vue-router'
 const route = useRoute()
 // router
 const router = useRouter()
+// vant form ref
+const vantForm = ref<FormInstance>()
 // 表单提交项目
 const formData = ref({
   // 手机号
@@ -89,8 +121,16 @@ const formData = ref({
   // 密码
   password: 'abc12345',
   // 用户协议
-  useragreement: false
+  useragreement: false,
+  // 验证码code
+  code: ''
 })
+// 表单的类型
+const isPassword = ref(true)
+// 验证码计时 60 秒
+const countDownNum = ref(0)
+// 计时器
+let timeId: number
 // 表单提交
 const onSubmit = async () => {
   // 判断是否选择了用户协议
@@ -102,10 +142,9 @@ const onSubmit = async () => {
   loginLoading.value = true
   // 提交表单
   try {
-    let data = await loginPassword(
-      formData.value.mobile,
-      formData.value.password
-    )
+    let data = isPassword.value
+      ? await loginPassword(formData.value.mobile, formData.value.password)
+      : await loginCode(formData.value.mobile, formData.value.code)
     // 存储用户信息
     usersStore.setUser(data.data)
     // 按钮loading 加载
@@ -126,10 +165,55 @@ const onSubmit = async () => {
 const barRightclick = () => {
   console.log('注册')
 }
+// 切换登录的方式
+const changeLoginType = () => {
+  isPassword.value = !isPassword.value
+}
+// 点击获取验证码
+const sendMessageCode = async () => {
+  // 清除定时器
+  clearInterval(timeId)
+  // 判断时间是否正在倒计时
+  if (countDownNum.value > 0) return
+  // 判断用户手机号是否输入正确
+  await vantForm.value?.validate('mobile')
+  // 获取验证码
+  getMessageCode()
+  // 设置计时60
+  countDownNum.value = 3
+  // 每隔一秒--
+  timeId = window.setInterval(() => {
+    countDownNum.value--
+  }, 1000)
+}
+// 获取验证码
+const getMessageCode = async () => {
+  try {
+    const data = await getMobileCode(formData.value.mobile, 'login')
+    showToast({
+      duration: 2000,
+      message: `您的验证码是${data.data.code}`
+    })
+    // 回填验证码
+    formData.value.code = data.data.code
+  } catch (err) {
+    countDownNum.value = 0
+    // 清空定时器
+    clearInterval(timeId)
+  }
+}
+// 页面卸载
+onUnmounted(() => {
+  clearInterval(timeId)
+})
 </script>
 
 <style scoped lang="scss">
 .login-container {
+  height: 100vh;
+  .login-content {
+    position: relative;
+  }
   .login-form-area {
     .login-form-area-head {
       display: flex;
@@ -178,6 +262,48 @@ const barRightclick = () => {
           .van-button__content {
             font-size: 16px;
           }
+        }
+      }
+    }
+  }
+  .countdownActive {
+    opacity: 0.5 !important;
+  }
+  .login-type {
+    margin-top: 200px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .login-type-line {
+      width: 100%;
+      position: relative;
+      margin-bottom: 20px;
+      span {
+        width: 100%;
+        display: block;
+        font-size: 14px;
+        color: #ccc;
+        text-align: center;
+        &::after {
+          content: '';
+          display: inline-block;
+          width: 50px;
+          height: 1px;
+          background-color: #ccc;
+          margin-left: 10px;
+          position: relative;
+          top: -3px;
+        }
+        &::before {
+          content: '';
+          display: inline-block;
+          width: 50px;
+          height: 1px;
+          background-color: #ccc;
+          margin-right: 10px;
+          position: relative;
+          top: -3px;
         }
       }
     }

@@ -1,5 +1,5 @@
 import { fileURLToPath, URL } from 'node:url'
-
+import path from 'path'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
@@ -10,6 +10,9 @@ import Components from 'unplugin-vue-components/vite'
 import { VantResolver } from 'unplugin-vue-components/resolvers'
 // vite 插件
 import vueSetupExtend from 'vite-plugin-vue-setup-extend-plus'
+// 处理svg
+import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
+
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
@@ -19,6 +22,10 @@ export default defineConfig({
     Components({
       dts: false,
       resolvers: [VantResolver({ importStyle: false })]
+    }),
+    createSvgIconsPlugin({
+      // 指定需要缓存的图标文件夹
+      iconDirs: [path.resolve(process.cwd(), 'src/icons')]
     })
   ],
   resolve: {

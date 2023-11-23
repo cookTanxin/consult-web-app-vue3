@@ -12,3 +12,11 @@ export type User = {
   // 用户id
   id: string
 }
+
+// 获取验证类型 使用联合类型 字面量 login登录register注册changeMobile更换手机号forgetPassword找回密码,bindMobile绑定三方登录，区分验证码
+export type MessageCodeType =
+  | 'login'
+  | 'register'
+  | 'changeMobile'
+  | 'forgetPassword'
+  | 'bindMobile'
