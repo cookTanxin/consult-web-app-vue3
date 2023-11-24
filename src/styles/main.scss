@@ -38,3 +38,10 @@ h1,h2,h3,h4,h5,h6,p,ul,ol {
 .cp-text-green{
   color: var(--cp-primary);
 }
+
+// 设置进度条加载颜色
+#nprogress{
+  .bar{
+    background-color: var(--cp-primary);
+  }
+}

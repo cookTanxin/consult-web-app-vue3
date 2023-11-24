@@ -14,7 +14,7 @@ type Props = {
   // 图标名称
   iconname: string
   // 图标大小
-  size: number
+  size?: number
 }
 // 自定义参数 给泛型参数传参
 withDefaults(defineProps<Props>(), {

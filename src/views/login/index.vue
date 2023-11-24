@@ -2,6 +2,7 @@
   <div class="login-container">
     <!-- 自定义导航组件 -->
     <c-nav-bar
+      :leftArrow="false"
       @rightClick="barRightclick"
       right-text="注册"
       title="登录"
@@ -153,9 +154,9 @@ const onSubmit = async () => {
     showSuccessToast('登录成功！')
     // 判断是否需要回调url
     if (route.query.returnUrl) {
-      router.replace(route.query.returnUrl as string)
+      await router.replace(route.query.returnUrl as string)
     } else {
-      router.replace('/')
+      await router.replace('/')
     }
   } catch (err) {
     loginLoading.value = false
@@ -178,7 +179,7 @@ const sendMessageCode = async () => {
   // 判断用户手机号是否输入正确
   await vantForm.value?.validate('mobile')
   // 获取验证码
-  getMessageCode()
+  await getMessageCode()
   // 设置计时60
   countDownNum.value = 3
   // 每隔一秒--
