@@ -55,7 +55,7 @@
 </template>
 
 <style scoped lang="scss">
-.layout-page{
+.layout-page {
   .van-tabbar-item {
     &__icon {
       font-size: 21px;

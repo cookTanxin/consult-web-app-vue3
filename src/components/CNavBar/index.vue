@@ -31,7 +31,7 @@ interface Emits {
 // 自定义事件 给泛型参数传参
 const emit = defineEmits<Emits>()
 // 自定义参数 给泛型参数传参
-withDefaults(defineProps<Props>(),{
+withDefaults(defineProps<Props>(), {
   leftArrow: true
 })
 // router
