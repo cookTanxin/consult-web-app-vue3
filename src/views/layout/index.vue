@@ -13,7 +13,6 @@
             :iconname="`${
               props.active ? 'home-index-active' : 'home-index-default'
             }`"
-            :size="25"
           ></c-icon>
         </template>
       </van-tabbar-item>
@@ -24,7 +23,6 @@
             :iconname="`${
               props.active ? 'home-article-active' : 'home-article-default'
             }`"
-            :size="25"
           ></c-icon>
         </template>
       </van-tabbar-item>
@@ -35,7 +33,6 @@
             :iconname="`${
               props.active ? 'home-notice-active' : 'home-notice-default'
             }`"
-            :size="25"
           ></c-icon>
         </template>
       </van-tabbar-item>
@@ -46,7 +43,6 @@
             :iconname="`${
               props.active ? 'home-mine-active' : 'home-mine-default'
             }`"
-            :size="25"
           ></c-icon>
         </template>
       </van-tabbar-item>

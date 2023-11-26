@@ -86,7 +86,9 @@
         <div class="login-type-line">
           <span>第三方登录</span>
         </div>
-        <c-icon iconname="consult-alipay" :size="35"></c-icon>
+        <a class="icon">
+          <img src="@/assets/qq.svg" alt="" />
+        </a>
       </div>
     </div>
   </div>
@@ -97,7 +99,7 @@
 import { ref, onUnmounted } from 'vue'
 // 导入表单验证规则
 import { mobileRule, passwordRule } from '@/utils/rules'
-// vant
+// vant UI
 import { showToast, showSuccessToast, type FormInstance } from 'vant'
 // api
 import { loginPassword, getMobileCode, loginCode } from '@/services/public'
@@ -294,7 +296,7 @@ onUnmounted(() => {
           background-color: #ccc;
           margin-left: 10px;
           position: relative;
-          top: -3px;
+          top: -4px;
         }
         &::before {
           content: '';
@@ -304,8 +306,13 @@ onUnmounted(() => {
           background-color: #ccc;
           margin-right: 10px;
           position: relative;
-          top: -3px;
+          top: -4px;
         }
+      }
+    }
+    .icon {
+      img {
+        width: 40px;
       }
     }
   }

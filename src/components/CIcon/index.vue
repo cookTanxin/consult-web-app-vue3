@@ -1,8 +1,8 @@
 <template>
   <div class="c-icon">
     <svg
+      class="c-icon-svg"
       aria-hidden="true"
-      :style="{ width: size + 'px', height: size + 'px' }"
     >
       <use :href="`#icon-${iconname}`" />
     </svg>
@@ -21,3 +21,10 @@ withDefaults(defineProps<Props>(), {
   size: 15
 })
 </script>
+
+<style lang="scss" scoped>
+.c-icon-svg {
+  width: 1em;
+  height: 1em;
+}
+</style>
