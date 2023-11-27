@@ -1,5 +1,3 @@
-<script setup lang="ts" name="mine"></script>
-
 <template>
   <div class="mine-page layout-container">
     <div class="mine-inner-container">
@@ -9,8 +7,6 @@
           <!--头像-->
           <div class="mine-user-avatar">
             <van-image
-              width="70"
-              height="70"
               round
               fit="cover"
               src="https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg"
@@ -18,8 +14,8 @@
           </div>
           <!--用户名称-->
           <div class="mine-user-info">
-            <div class="mine-user-username">张三</div>
-            <van-icon name="edit" size="18" color="#2fc8ac" />
+            <div class="mine-user-username">{{ userStore.user?.account }}</div>
+            <van-icon name="edit" color="#2fc8ac" />
           </div>
         </div>
         <!--收藏关注积分优惠卷-->
@@ -58,24 +54,135 @@
           <div class="mine-item-title-left">药品订单</div>
           <div class="mine-item-title-right">
             <span>全部订单</span>
+            <van-icon name="arrow" />
           </div>
         </div>
+        <!--订单图标区域-->
+        <van-row class="order-icon-area">
+          <van-col span="6">
+            <van-badge :content="5">
+              <div class="order-item-icon">
+                <c-icon iconname="user-paid"></c-icon>
+                <p>待付款</p>
+              </div>
+            </van-badge>
+          </van-col>
+          <van-col span="6">
+            <van-badge :content="5">
+              <div class="order-item-icon">
+                <c-icon iconname="user-shipped"></c-icon>
+                <p>待发货</p>
+              </div>
+            </van-badge>
+          </van-col>
+          <van-col span="6">
+            <van-badge :content="5">
+              <div class="order-item-icon">
+                <c-icon iconname="user-received"></c-icon>
+                <p>待收货</p>
+              </div>
+            </van-badge>
+          </van-col>
+          <van-col span="6">
+            <van-badge :content="5">
+              <div class="order-item-icon">
+                <c-icon iconname="user-finished"></c-icon>
+                <p>已完成</p>
+              </div>
+            </van-badge>
+          </van-col>
+        </van-row>
+      </div>
+      <!--底部列表区域-->
+      <div class="order-tool-list mine-item">
+        <div class="mine-item-title">
+          <div class="mine-item-title-left">快捷工具</div>
+        </div>
+        <!--列表区域-->
+        <div class="order-tool-list-container">
+          <van-cell-group :border="false">
+            <van-cell
+              v-for="(item, index) in toolUrlList"
+              :key="index"
+              :title="item.label"
+              is-link
+              :border="false"
+            >
+              <template #icon>
+                <c-icon :iconname="`user-tool-0${index + 1}`"></c-icon>
+              </template>
+            </van-cell>
+          </van-cell-group>
+        </div>
+      </div>
+      <!--退出登录区域-->
+      <div class="login-out-area" @click="logout">
+        <p>退出登录</p>
       </div>
     </div>
   </div>
 </template>
 
+<script setup lang="ts" name="mine">
+// 快捷链接字段数据
+import { toolUrlList } from '@/config'
+// vant
+import { showDialog, showToast } from 'vant'
+// store
+import { useUserStore } from '@/stores'
+// vue-router
+import { useRouter } from 'vue-router'
+// store
+const userStore = useUserStore()
+// router
+const router = useRouter()
+// 用户退出登录
+const logout = () => {
+  // 询问客户是否退出
+  showDialog({
+    title: '温馨提示',
+    message: '确认退出登录吗？',
+    showCancelButton: true
+  })
+    .then(() => {
+      // 清空用户数据
+      userStore.delUser()
+      // 跳转到登录页面
+      router.push('/login').then(() => {
+        showToast('退出成功！')
+      })
+    })
+    .catch(() => {
+      showToast('已取消')
+    })
+}
+</script>
+
 <style scoped lang="scss">
 .mine-page {
+  padding: 0 0px 65px;
   background-color: #f6f7f9;
+  //100vh - 50 tabbar 高度
+  min-height: calc(100vh - 50px);
   .mine-inner-container {
     .mine-item {
       background-color: #fff;
-      border-radius: 5px;
-      margin-left: 16px;
-      margin-right: 16px;
+      border-radius: 8px;
       padding: 14px;
       box-sizing: border-box;
+      .mine-item-title {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        justify-content: space-between;
+        .mine-item-title-left {
+          font-size: 16px;
+          font-weight: bold;
+        }
+        .mine-item-title-right {
+          color: #c8c8ca;
+        }
+      }
     }
     .mine-inner-content-top {
       padding: 49px 16px 16px 16px;
@@ -90,6 +197,10 @@
         .mine-user-avatar {
           width: 70px;
           height: 70px;
+          .van-image {
+            width: 100%;
+            height: 100%;
+          }
         }
         .mine-user-info {
           margin-left: 10px;
@@ -97,6 +208,9 @@
             font-size: 16px;
             font-weight: bold;
             margin-bottom: 10px;
+          }
+          .van-icon {
+            font-size: 15px;
           }
         }
       }
@@ -117,6 +231,46 @@
         }
       }
     }
+  }
+  .medicine-order {
+    margin-left: 16px;
+    margin-right: 16px;
+    .order-icon-area {
+      margin-top: 20px;
+      .van-col {
+        text-align: center;
+      }
+    }
+    .order-item-icon {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      p {
+        margin-top: 6px;
+        font-size: 12px;
+      }
+      .c-icon {
+        font-size: 30px;
+      }
+    }
+  }
+  .order-tool-list {
+    margin-top: 20px;
+    margin-left: 16px;
+    margin-right: 16px;
+    .order-tool-list-container {
+      margin-top: 15px;
+      .c-icon {
+        font-size: 22px;
+        margin-right: 8px;
+      }
+    }
+  }
+  .login-out-area {
+    margin-top: 20px;
+    text-align: center;
+    width: 100%;
+    color: var(--cp-warning);
   }
 }
 </style>
