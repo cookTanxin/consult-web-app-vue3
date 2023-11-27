@@ -23,7 +23,27 @@ const router = createRouter({
       meta: { title: '登录' },
       component: () => import('@/views/login/index.vue')
     },
-    // 主布局
+    // 地址页面
+    {
+      path: '/user/address',
+      name: 'address',
+      meta: { title: '用户地址' },
+      component: () => import('@/views/user/address/index.vue')
+    },
+    // 我的问诊
+    {
+      path: '/user/consult',
+      name: 'consult',
+      meta: { title: '我的问诊' },
+      component: () => import('@/views/user/consult/index.vue')
+    },
+    {
+      path: '/user/patient',
+      name: 'patient',
+      meta: { title: '家庭档案' },
+      component: () => import('@/views/user/patient/index.vue')
+    },
+    // 主布局 tabbar 页面
     {
       path: '/',
       name: 'layout',
@@ -67,6 +87,7 @@ router.beforeEach((to, from) => {
   const userStore = useUserStore()
   // 判断用户是否登录 如果登录了再次到 login 不跳转 跳转回去
   if (userStore.user?.token && to.path === '/login') {
+    showToast('已经登录了哦！')
     return from.path
   }
   if (!userStore.user?.token && !withRouter.includes(to.path)) {

@@ -14,7 +14,7 @@
           </div>
           <!--用户名称-->
           <div class="mine-user-info">
-            <div class="mine-user-username">{{ userStore.user?.account }}</div>
+            <div class="mine-user-username">{{ userInfo?.account || 0 }}</div>
             <van-icon name="edit" color="#2fc8ac" />
           </div>
         </div>
@@ -23,25 +23,33 @@
           <van-row>
             <van-col span="6">
               <div class="mine-user-property-item">
-                <span class="user-property-number">15</span>
+                <span class="user-property-number">
+                  {{ userInfo?.collectionNumber || 0 }}
+                </span>
                 <span class="user-property-name">收藏</span>
               </div>
             </van-col>
             <van-col span="6">
               <div class="mine-user-property-item">
-                <span class="user-property-number">15</span>
+                <span class="user-property-number">
+                  {{ userInfo?.likeNumber || 0 }}
+                </span>
                 <span class="user-property-name">关注</span>
               </div>
             </van-col>
             <van-col span="6">
               <div class="mine-user-property-item">
-                <span class="user-property-number">15</span>
+                <span class="user-property-number">
+                  {{ userInfo?.score || 0 }}
+                </span>
                 <span class="user-property-name">积分</span>
               </div>
             </van-col>
             <van-col span="6">
               <div class="mine-user-property-item">
-                <span class="user-property-number">15</span>
+                <span class="user-property-number">
+                  {{ userInfo?.couponNumber || 0 }}
+                </span>
                 <span class="user-property-name">优惠卷</span>
               </div>
             </van-col>
@@ -60,7 +68,7 @@
         <!--订单图标区域-->
         <van-row class="order-icon-area">
           <van-col span="6">
-            <van-badge :content="5">
+            <van-badge :content="userInfo?.orderInfo.paidNumber || ''">
               <div class="order-item-icon">
                 <c-icon iconname="user-paid"></c-icon>
                 <p>待付款</p>
@@ -68,7 +76,7 @@
             </van-badge>
           </van-col>
           <van-col span="6">
-            <van-badge :content="5">
+            <van-badge :content="userInfo?.orderInfo.receivedNumber || ''">
               <div class="order-item-icon">
                 <c-icon iconname="user-shipped"></c-icon>
                 <p>待发货</p>
@@ -76,7 +84,7 @@
             </van-badge>
           </van-col>
           <van-col span="6">
-            <van-badge :content="5">
+            <van-badge :content="userInfo?.orderInfo.shippedNumber || ''">
               <div class="order-item-icon">
                 <c-icon iconname="user-received"></c-icon>
                 <p>待收货</p>
@@ -84,7 +92,7 @@
             </van-badge>
           </van-col>
           <van-col span="6">
-            <van-badge :content="5">
+            <van-badge :content="userInfo?.orderInfo.finishedNumber || ''">
               <div class="order-item-icon">
                 <c-icon iconname="user-finished"></c-icon>
                 <p>已完成</p>
@@ -107,6 +115,7 @@
               :title="item.label"
               is-link
               :border="false"
+              @click="goUrl(item)"
             >
               <template #icon>
                 <c-icon :iconname="`user-tool-0${index + 1}`"></c-icon>
@@ -126,16 +135,24 @@
 <script setup lang="ts" name="mine">
 // 快捷链接字段数据
 import { toolUrlList } from '@/config'
+// api
+import { getUserInfo } from '@/services/user'
 // vant
 import { showDialog, showToast } from 'vant'
 // store
 import { useUserStore } from '@/stores'
 // vue-router
 import { useRouter } from 'vue-router'
+// vue
+import { onMounted, ref } from 'vue'
+// 类型
+import type { UserinfoData } from '@/types/user'
 // store
 const userStore = useUserStore()
 // router
 const router = useRouter()
+// 用户数据
+const userInfo = ref<UserinfoData>()
 // 用户退出登录
 const logout = () => {
   // 询问客户是否退出
@@ -156,6 +173,24 @@ const logout = () => {
       showToast('已取消')
     })
 }
+// 跳转链接
+const goUrl = (item: any) => {
+  router.push({
+    path: item.path
+  })
+}
+
+// 获取用户信息数据
+const getUserInfoData = async () => {
+  const data = await getUserInfo()
+  userInfo.value = data.data
+}
+
+// 页面挂载
+onMounted(() => {
+  // 获取用户数据
+  getUserInfoData()
+})
 </script>
 
 <style scoped lang="scss">

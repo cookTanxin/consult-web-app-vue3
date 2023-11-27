@@ -9,7 +9,7 @@
 <script setup lang="ts">
 type Props = {
   // 图标名称
-  iconname: string
+  iconname?: string
   // 图标大小
   size?: number
 }

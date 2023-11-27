@@ -21,6 +21,7 @@ type Props = {
   rightText?: string
   border?: boolean
   leftArrow?: boolean
+  back?: () => void
 }
 // 定义一个事件类型 emits
 interface Emits {
@@ -31,7 +32,7 @@ interface Emits {
 // 自定义事件 给泛型参数传参
 const emit = defineEmits<Emits>()
 // 自定义参数 给泛型参数传参
-withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   leftArrow: true
 })
 // router
@@ -39,12 +40,16 @@ const router = useRouter()
 
 // 点击左侧箭头跳转
 const onClickLeft = () => {
-  if (history.state?.back) {
-    router.back()
+  if (props.back) {
+    props.back()
   } else {
-    router.push({
-      path: '/'
-    })
+    if (history.state?.back) {
+      router.back()
+    } else {
+      router.push({
+        path: '/'
+      })
+    }
   }
   emit('leftClick')
 }
