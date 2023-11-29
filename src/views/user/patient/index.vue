@@ -82,6 +82,7 @@ const addPatient = (type: string, item?: {}) => {
     showToast('只能添加6位哦！')
     return
   }
+  // 打开弹窗
   addEditPatientRef.value?.openPopup(type, item)
 }
 onMounted(() => {
