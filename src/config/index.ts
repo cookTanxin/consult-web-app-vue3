@@ -12,4 +12,11 @@ const toolUrlList = [
   { label: '官方客服', path: '/' },
   { label: '设置', path: '/' }
 ]
-export { withRouter, appName, toolUrlList }
+// 首页标签
+const homeTabs = [
+  { title: '关注', type: 'like' },
+  { title: '推荐', type: 'recommend' },
+  { title: '减脂', type: 'fatReduction' },
+  { title: '健康饮食', type: 'food' }
+]
+export { withRouter, appName, toolUrlList, homeTabs }

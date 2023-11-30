@@ -13,6 +13,9 @@ export type User = {
   id: string
 }
 
+// 关注类型 联合类型 topic百科话题,knowledge百科文章,doc医生,disease疾病
+export type followType = 'topic' | 'knowledge' | 'doc' | 'disease'
+
 // 获取验证类型 使用联合类型 字面量 login登录register注册changeMobile更换手机号forgetPassword找回密码,bindMobile绑定三方登录，区分验证码
 export type MessageCodeType =
   | 'login'

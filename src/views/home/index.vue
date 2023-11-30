@@ -1,5 +1,9 @@
-<script setup lang="ts" name="home"></script>
-
+<script setup lang="ts" name="home">
+// tab 配置项
+import { homeTabs } from '@/config'
+// 首页列表组件
+import homeList from './component/HomeList.vue'
+</script>
 <template>
   <div class="home-page">
     <!--顶部搜索区域-->
@@ -93,12 +97,25 @@
       </van-swipe>
     </div>
     <!--底部新闻列表-->
-    <div class="home-content-list">底部新闻列表</div>
+    <div class="home-content-list">
+      <van-tabs shrink sticky>
+        <van-tab
+          :title="item.title"
+          v-for="(item, index) in homeTabs"
+          :key="index"
+        >
+          <homeList :type="item.type"></homeList>
+        </van-tab>
+      </van-tabs>
+    </div>
+    <van-back-top :bottom="80" />
   </div>
 </template>
 
 <style scoped lang="scss">
 .home-page {
+  min-height: calc(100vh - 50px);
+  padding: 0 0px 65px;
   .home-top-search {
     width: 100%;
     position: relative;
@@ -197,6 +214,17 @@
         display: block;
         margin: 0 auto;
         height: 98px;
+      }
+    }
+  }
+  .home-content-list {
+    margin-top: 20px;
+    :deep() {
+      .van-tabs__line {
+        width: 20px;
+      }
+      .van-tab__text {
+        font-size: 15px;
       }
     }
   }

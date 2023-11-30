@@ -1,11 +1,16 @@
-<script setup lang="ts" name="layout"></script>
+<script setup lang="ts" name="layout">
+// 切换路由 页面回到顶部
+const changeTab = () => {
+  window.scrollTo(0, 0)
+}
+</script>
 
 <template>
   <div class="layout-page">
     <!--主布局子页面-->
     <router-view></router-view>
     <!--page-tab components -->
-    <van-tabbar route>
+    <van-tabbar route @change="changeTab">
       <van-tabbar-item to="/home">
         <span>首页</span>
         <template #icon="props">
