@@ -1,37 +1,13 @@
 <script setup lang="ts">
 // types
 import type { Knowledge } from '@/types/home'
-import type { FollowParams } from '@/types/common'
-import { ref } from 'vue'
+// 关注的组合式api
+import { useFollow } from '@/composables/useFollow'
 type Props = {
   item: Knowledge
 }
-const props = defineProps<Props>()
-// api
-import { followData } from '@/services/user'
-// 关注按钮是否正在更新
-const btnLoading = ref(false)
-// 点击关注
-const followClick = async (item: { id: string; likeFlag: number }) => {
-  let params: FollowParams = {
-    type: 'knowledge',
-    id: props.item.id
-  }
-  // 按钮加载
-  btnLoading.value = true
-  try {
-    await followData(params)
-    // 更新视图
-    item.likeFlag = item.likeFlag === 1 ? 0 : 1
-    btnLoading.value = false
-  } catch (e) {
-    // 失败执行函数
-    btnLoading.value = false
-  } finally {
-    // 不管成功还是失败都会执行
-    btnLoading.value = false
-  }
-}
+defineProps<Props>()
+const { btnLoading, followClick } = useFollow()
 </script>
 
 <template>
