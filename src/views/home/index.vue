@@ -34,7 +34,7 @@ import homeList from './component/HomeList.vue'
             </router-link>
           </van-col>
           <van-col span="8">
-            <router-link to="/">
+            <router-link to="/consult/fast">
               <c-icon iconname="home-graphic"></c-icon>
               <p class="title">极速问诊</p>
               <p class="desc">20s医生极速回复</p>

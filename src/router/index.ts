@@ -43,6 +43,20 @@ const router = createRouter({
       meta: { title: '家庭档案' },
       component: () => import('@/views/user/patient/index.vue')
     },
+    // 急速问诊
+    {
+      path: '/consult/fast',
+      name: 'consultFast',
+      meta: { title: '急速问诊' },
+      component: () => import('@/views/consult/fast/index.vue')
+    },
+    // 咨询科室
+    {
+      path: '/consult/dep',
+      name: 'consultDep',
+      meta: { title: '选择科室' },
+      component: () => import('@/views/consult/dep/index.vue')
+    },
     // 主布局 tabbar 页面
     {
       path: '/',

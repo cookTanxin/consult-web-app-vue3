@@ -6,11 +6,7 @@
         <div class="mine-page-user-account">
           <!--头像-->
           <div class="mine-user-avatar">
-            <van-image
-              round
-              fit="cover"
-              src="https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg"
-            />
+            <van-image round fit="cover" :src="userInfo?.avatar" />
           </div>
           <!--用户名称-->
           <div class="mine-user-info">
