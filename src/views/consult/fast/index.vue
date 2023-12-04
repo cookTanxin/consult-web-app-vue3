@@ -20,7 +20,7 @@
     </div>
     <!-- 急速问诊选项 -->
     <div class="consult-fast-select-list">
-      <div class="consult-fast-select-item">
+      <div class="consult-fast-select-item" @click="goPage">
         <div class="consult-fast-select-left">
           <c-icon iconname="consult-doctor"></c-icon>
           <div class="consult-fast-select-left-text">
@@ -32,7 +32,7 @@
           <van-icon name="arrow" color="#999" />
         </div>
       </div>
-      <div class="consult-fast-select-item">
+      <div class="consult-fast-select-item" @click="goPage">
         <div class="consult-fast-select-left">
           <c-icon iconname="consult-message"></c-icon>
           <div class="consult-fast-select-left-text">
@@ -49,9 +49,19 @@
 </template>
 
 <script setup lang="ts" name="consultFast">
+// 路由
+import { useRouter } from 'vue-router'
+// router
+const router = useRouter()
 // 查询问诊记录
 const barRightclick = () => {
   console.log('查询问诊记录')
+}
+// 跳转页面
+const goPage = () => {
+  router.push({
+    path: '/consult/dep'
+  })
 }
 </script>
 

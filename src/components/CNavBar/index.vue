@@ -61,7 +61,7 @@ const onClickRight = () => {
 
 <style scoped lang="scss">
 .c-nav-bar {
-  height: 50px;
+  height: 46px;
   :deep() {
     .van-nav-bar {
       &__arrow {

@@ -1,6 +1,6 @@
 export {}
 enum Citys {
-  china=6,
+  china = 6,
   american,
   korean
 }
