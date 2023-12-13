@@ -57,6 +57,13 @@ const router = createRouter({
       meta: { title: '选择科室' },
       component: () => import('@/views/consult/dep/index.vue')
     },
+    // 问诊记录信息页面
+    {
+      path: '/consult/illness',
+      name: 'illness',
+      meta: { title: '问诊记录' },
+      component: () => import('@/views/consult/illness/index.vue')
+    },
     // 主布局 tabbar 页面
     {
       path: '/',
@@ -110,7 +117,7 @@ router.beforeEach((to, from) => {
 })
 
 // 全局路由守卫 后置
-router.afterEach((to, form) => {
+router.afterEach((to) => {
   // 设置页面标题 类型断言
   document.title = `${appName}-${to.meta.title as string}`
   // 进度条结束

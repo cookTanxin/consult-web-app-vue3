@@ -19,7 +19,7 @@
       <div class="consult-dep-right">
         <template v-if="allCate[selectAdmin]?.child.length > 0">
           <RouterLink
-            to="/"
+            to="/consult/illness"
             v-for="(childrenItem, cindex) in allCate[selectAdmin]?.child"
             :key="cindex"
           >
