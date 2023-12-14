@@ -89,22 +89,26 @@ const closePopup = () => {
 }
 // 右侧保存
 const rightSave = async () => {
-  await vantForm.value?.validate()
-  let params: PatientFormData = {
-    name: state.value.formData.name,
-    idCard: state.value.formData.idCard,
-    defaultFlag: state.value.formData.defaultFlag ? 1 : 0,
-    gender: state.value.formData.gender
+  try {
+    await vantForm.value?.validate()
+    let params: PatientFormData = {
+      name: state.value.formData.name,
+      idCard: state.value.formData.idCard,
+      defaultFlag: state.value.formData.defaultFlag ? 1 : 0,
+      gender: state.value.formData.gender
+    }
+    if (state.value.type === 'add') {
+      await addPatient(params)
+      showToast('添加成功')
+    } else {
+      await updatePatient(state.value.formData)
+      showToast('编辑成功！')
+    }
+    closePopup()
+    emit('refresh')
+  } catch (error) {
+    showToast('请填写表单信息')
   }
-  if (state.value.type === 'add') {
-    await addPatient(params)
-    showToast('添加成功')
-  } else {
-    await updatePatient(state.value.formData)
-    showToast('编辑成功！')
-  }
-  closePopup()
-  emit('refresh')
 }
 
 // 删除患者

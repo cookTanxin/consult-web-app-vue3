@@ -64,6 +64,13 @@ const router = createRouter({
       meta: { title: '问诊记录' },
       component: () => import('@/views/consult/illness/index.vue')
     },
+    // 支付页面
+    {
+      path: '/consult/pay',
+      name: 'pay',
+      meta: { title: '支付费用' },
+      component: () => import('@/views/consult/pay/index.vue')
+    },
     // 主布局 tabbar 页面
     {
       path: '/',

@@ -91,7 +91,7 @@ const goPage = () => {
       border-radius: 5px;
       display: flex;
       align-items: center;
-      margin-top: 40px;
+      margin-top: 20px;
       padding: 16px;
       box-sizing: border-box;
       justify-content: space-between;

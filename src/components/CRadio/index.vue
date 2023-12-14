@@ -4,7 +4,7 @@ type RadioItem = {
   value: number
 }
 type Props = {
-  modelValue: number
+  modelValue?: number | string
   listdata: RadioItem[]
 }
 type Emits = {
@@ -39,7 +39,9 @@ const selectRadio = (item: RadioItem) => {
 .c-radio-container {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   .c-radio-item {
+    margin-bottom: 10px;
     border: 1px solid var(--cp-bg);
     background-color: var(--cp-bg);
     padding: 4px 15px;
