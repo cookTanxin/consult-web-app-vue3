@@ -1,4 +1,4 @@
-import type { ConsultType, IllnessTime } from "@/enums"
+import type { ConsultType, IllnessTime } from '@/enums'
 
 // 科室类型数据
 type Child = {
@@ -17,7 +17,6 @@ type AllCate = {
   // 子数据
   child: Child[]
 }
-
 
 // 图片列表
 type Image = {

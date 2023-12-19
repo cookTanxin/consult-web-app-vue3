@@ -19,4 +19,3 @@ export enum IllnessTime {
   // 半年以上
   More
 }
-
