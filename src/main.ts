@@ -13,8 +13,6 @@ import 'vant/lib/index.css'
 // style
 import './styles/main.scss'
 
-import './enums/test'
-
 const app = createApp(App)
 
 app.use(pinia)
