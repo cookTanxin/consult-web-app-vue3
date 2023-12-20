@@ -6,5 +6,7 @@ const pinia = createPinia().use(piniaPluginPersistedstate)
 
 // user 模块
 export * from './modules/user'
+// consult 模块
+export * from './modules/consult'
 
 export default pinia

@@ -3,6 +3,12 @@
 import { homeTabs } from '@/config'
 // 首页列表组件
 import homeList from './component/HomeList.vue'
+// store
+import { useConsult } from '@/stores'
+// 枚举类型
+import { ConsultType } from '@/enums'
+// 全局仓库
+const useStore = useConsult()
 </script>
 <template>
   <div class="home-page">
@@ -34,7 +40,10 @@ import homeList from './component/HomeList.vue'
             </router-link>
           </van-col>
           <van-col span="8">
-            <router-link to="/consult/fast">
+            <router-link
+              to="/consult/fast"
+              @click="useStore.setType(ConsultType.Fast)"
+            >
               <c-icon iconname="home-graphic"></c-icon>
               <p class="title">极速问诊</p>
               <p class="desc">20s医生极速回复</p>

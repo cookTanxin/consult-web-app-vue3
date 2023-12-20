@@ -20,6 +20,7 @@
         <template v-if="allCate[selectAdmin]?.child.length > 0">
           <RouterLink
             to="/consult/illness"
+            @click="useStore.setdepId(childrenItem.id)"
             v-for="(childrenItem, cindex) in allCate[selectAdmin]?.child"
             :key="cindex"
           >
@@ -41,10 +42,14 @@ import { getAllCate } from '@/services/consult'
 import { useLoading } from '@/composables/useLoading'
 // types
 import type { AllCate } from '@/types/consult'
+// store
+import { useConsult } from '@/stores/index'
 // 数据是否加载
 const { loadingMethod, LoadingData } = useLoading()
 // 全部科室数据
 const allCate = ref<AllCate[]>([])
+// store
+const useStore = useConsult()
 // 当前选中科室
 const selectAdmin = ref(0)
 // 获取全部数据分类
