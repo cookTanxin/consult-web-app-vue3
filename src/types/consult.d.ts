@@ -53,4 +53,7 @@ type Consult = {
 // 问诊记录数据全部为可选
 type PartialConsult = Partial<Consult>
 
-export { Child, AllCate, PartialConsult }
+// 患者填写表单类型 pick 摘取 omit 省略
+type IllnessFormData = Pick<PartialConsult,'illnessDesc' | 'illnessTime' | 'consultFlag' | 'pictures'>
+
+export { Child, AllCate, PartialConsult,IllnessFormData }

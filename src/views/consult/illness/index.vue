@@ -50,11 +50,15 @@
           <div class="form-item-content">
             <p class="form-item-title">上传内容仅医生可见,最多9张图,最大5MB</p>
             <van-uploader
-              v-model="submitData.consultImglist"
+              v-model="uploadFiles"
               :max-count="3"
               multiple
               :max-size="500 * 1024"
+              upload-icon="smile"
+              upload-text="上传吧！"
+              @delete="onDeleteImg"
               @oversize="onOversize"
+              :after-read="uploadAfter"
             />
           </div>
           <!-- 提交按钮 -->
@@ -72,32 +76,37 @@
 import { ref } from 'vue'
 // vant
 import { showToast } from 'vant'
+// 枚举
+import { IllnessTime } from '@/enums/index'
+import type { IllnessFormData } from '@/types/consult'
 // 患病时间1一周内2一月内3半年内4半年以上
 const illnessTimeOptions = [
-  { name: '一周内', value: 1 },
-  { name: '一月内', value: 2 },
-  { name: '半年内', value: 3 },
-  { name: '半年以上', value: 4 }
+  { name: '一周内', value: IllnessTime.Week },
+  { name: '一月内', value: IllnessTime.Month },
+  { name: '半年内', value: IllnessTime.HalfYear },
+  { name: '半年以上', value: IllnessTime.More }
 ]
 // 找医生/极速问诊-是否就诊过0未就诊1就诊过
 const consultFlagOptions = [
   { name: '未就诊', value: 0 },
   { name: '就诊过', value: 1 }
 ]
+// 上传图片数据
+const uploadFiles = ref([])
 // 提交表单数据
-const submitData = ref({
-  // 病情描述
-  illnessDesc: '',
-  // 患病多久了
-  illnessTime: undefined,
-  // 是否就诊
-  consultFlag: undefined,
-  // 用户上传的图片
-  consultImglist: []
-})
+const submitData = ref<IllnessFormData>({})
 // 限制图片上传大小
 const onOversize = () => {
   showToast('图片太大了,缩小图片哦！')
+}
+// 删除图片
+const onDeleteImg = () => {
+  console.log('delete')
+}
+// 上传图片完成以后事件
+const uploadAfter = (file) => {
+  console.log('上传完成')
+  console.log(file)
 }
 </script>
 
