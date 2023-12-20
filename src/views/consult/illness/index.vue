@@ -24,8 +24,9 @@
       <van-form>
         <van-cell-group :border="false">
           <van-field
+            size="normal"
             v-model="submitData.illnessDesc"
-            rows="6"
+            rows="3"
             :border="false"
             type="textarea"
             placeholder="请详细描述您的病情，病情描述不能为空"
@@ -53,17 +54,24 @@
               v-model="uploadFiles"
               :max-count="3"
               multiple
-              :max-size="500 * 1024"
+              :max-size="2 * 1024 * 1024"
               upload-icon="smile"
               upload-text="上传吧！"
               @delete="onDeleteImg"
               @oversize="onOversize"
-              :after-read="uploadAfter"
+              :after-read="onAfterRead"
             />
           </div>
           <!-- 提交按钮 -->
           <div class="submit-button">
-            <van-button type="primary" block round>下一步</van-button>
+            <van-button
+              type="primary"
+              @click="onSubmit"
+              :class="{ disabled }"
+              block
+              round
+              >下一步</van-button
+            >
           </div>
         </van-cell-group>
       </van-form>
@@ -73,12 +81,27 @@
 
 <script setup lang="ts">
 // vue
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 // vant
 import { showToast } from 'vant'
+import type {
+  UploaderAfterRead,
+  UploaderFileListItem
+} from 'vant/lib/uploader/types'
 // 枚举
 import { IllnessTime } from '@/enums/index'
+// 类型
 import type { IllnessFormData } from '@/types/consult'
+// api
+import { uploadFile } from '@/services/public'
+// store
+import { useConsult } from '@/stores'
+// router
+import { useRouter } from 'vue-router'
+// store
+const useStore = useConsult()
+// router
+const router = useRouter()
 // 患病时间1一周内2一月内3半年内4半年以上
 const illnessTimeOptions = [
   { name: '一周内', value: IllnessTime.Week },
@@ -93,24 +116,79 @@ const consultFlagOptions = [
 ]
 // 上传图片数据
 const uploadFiles = ref([])
-// 提交表单数据
-const submitData = ref<IllnessFormData>({})
+// 提交表单数据 需要初始变量啊！！！！
+const submitData = ref<IllnessFormData>({
+  illnessDesc: '',
+  illnessTime: undefined,
+  pictures: [],
+  consultFlag: undefined
+})
 // 限制图片上传大小
 const onOversize = () => {
   showToast('图片太大了,缩小图片哦！')
 }
 // 删除图片
-const onDeleteImg = () => {
-  console.log('delete')
+const onDeleteImg = (item: UploaderFileListItem) => {
+  // 把点击删除的id数据过滤掉
+  submitData.value.pictures = submitData.value.pictures?.filter(
+    (pic) => item.url != pic.url
+  )
 }
 // 上传图片完成以后事件
-const uploadAfter = (file) => {
-  console.log('上传完成')
-  console.log(file)
+const onAfterRead: UploaderAfterRead = async (item) => {
+  if (Array.isArray(item)) return
+  if (!item.file) return
+  item.status = 'uploading'
+  item.message = '上传中'
+  const imgData = await uploadFile(item.file)
+  // 给数据对象添加id 方便到时候删除
+  item.url = imgData.data.url
+  // 往表单中添加数据
+  submitData.value.pictures?.push(imgData.data)
+  item.status = 'done'
+  item.message = undefined
+}
+// 动态计算按钮是否可以点击下一步
+const disabled = computed(
+  () =>
+    submitData.value.consultFlag === undefined ||
+    submitData.value.illnessDesc === '' ||
+    submitData.value.illnessTime === undefined
+)
+// 提交数据
+const onSubmit = () => {
+  if (!submitData.value.illnessDesc) {
+    showToast('请输入病情')
+    return
+  }
+  if (!submitData.value.illnessTime) {
+    showToast('请选择患病时间')
+    return
+  }
+  if (submitData.value.consultFlag === undefined) {
+    showToast('请选择是否就诊过')
+    return
+  }
+  // 把数据存储在 store 中
+  useStore.setIllnessFormData(submitData.value)
+  // 跳转页面
+  router.push({
+    path: '/user/patient',
+    query: {
+      isChange: 1
+    }
+  })
 }
 </script>
 
 <style scoped lang="scss">
+::v-deep() {
+  .van-button {
+    &.disabled {
+      opacity: 0.5 !important;
+    }
+  }
+}
 .consult-illness {
   .consult-illness-top-content {
     padding: 16px;

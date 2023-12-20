@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 // vue
 import { ref } from 'vue'
 // type
-import type { PartialConsult } from '@/types/consult'
+import type { PartialConsult,IllnessFormData } from '@/types/consult'
 // 枚举
 import type { ConsultType } from '@/enums'
 
@@ -25,11 +25,24 @@ const useConsult = defineStore(
     const setdepId = (id: string) => {
       consultData.value.depId = id
     }
+    // 设置患者表单数据
+    const setIllnessFormData = (formData:IllnessFormData) => {
+      consultData.value.illnessDesc = formData.illnessDesc
+      consultData.value.illnessTime = formData.illnessTime
+      consultData.value.consultFlag = formData.consultFlag
+      consultData.value.pictures = formData.pictures
+    }
+    // 设置患者id
+    const setPatientId = (id:string) =>{
+      consultData.value.patientId = id
+    }
     return {
       setType,
       setillnessType,
       consultData,
-      setdepId
+      setdepId,
+      setIllnessFormData,
+      setPatientId
     }
   },
   {

@@ -1,10 +1,18 @@
 <template>
   <div class="patient-page">
     <!-- 自定义导航组件 -->
-    <c-nav-bar :leftArrow="true" title="家庭档案" border></c-nav-bar>
+    <c-nav-bar
+      :leftArrow="true"
+      :title="isChange ? '选择患者' : '家庭档案'"
+      border
+    ></c-nav-bar>
     <!--家庭档案列表-->
     <div class="family-list-container">
-      <div class="famliy-list-limit">最多添加6人</div>
+      <div class="select-patient" v-if="isChange">
+        <p>选择患者</p>
+        <span>以便医生给出更准确的治疗，信息仅医生可见</span>
+      </div>
+      <div class="famliy-list-limit" v-else>最多添加6人</div>
       <van-loading
         size="24px"
         vertical
@@ -15,6 +23,8 @@
       <div class="patient-list" v-else>
         <div
           class="family-list-item"
+          @click="onSelectPatient(item)"
+          :class="{ active: selectPatientId == item.id }"
           v-for="(item, index) in patientList"
           :key="index"
         >
@@ -43,6 +53,10 @@
         <p>添加患者</p>
       </div>
     </div>
+    <!-- 下一步按钮区域 -->
+    <div class="next-area" v-if="isChange">
+      <van-button type="primary" round block @click="onNext">下一步</van-button>
+    </div>
     <!--添加弹窗-->
     <add-edit-patient ref="addEditPatientRef" @refresh="getPatientData">
     </add-edit-patient>
@@ -53,27 +67,50 @@
 // api
 import { getPatientListdata } from '@/services/patient'
 // vue
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, computed } from 'vue'
+// vue-route
+import { useRoute, useRouter } from 'vue-router'
 // type
 import type { Patient } from '@/types/patient'
 // vant
 import { showToast } from 'vant'
 // 添加患者弹窗
 import addEditPatient from './component/addEditPatient.vue'
+// store
+import { useConsult } from '@/stores'
+// store
 // 患者列表数据
 const patientList = ref<Patient[]>([])
 // 数据是否在加载
 const firstLoad = ref(false)
+// 选中的患者的id
+const selectPatientId = ref('')
+// route
+const route = useRoute()
+// router
+const router = useRouter()
+// store
+const useStore = useConsult()
 // 弹窗ref
 const addEditPatientRef = ref<{
   openPopup: (type: string, item: any) => void
 }>()
+// 选择患者
+const onSelectPatient = (item: Patient) => {
+  if (isChange.value) {
+    selectPatientId.value = item.id || ''
+  }
+}
 // 获取家庭患者列表数据
 const getPatientData = async () => {
   firstLoad.value = true
   const data = await getPatientListdata()
   patientList.value = data.data
   firstLoad.value = false
+  // 设置默认选中
+  if (data.data.length > 0 && isChange.value) {
+    selectPatientId.value = data.data[0].id || ''
+  }
 }
 // 添加患者
 const addPatient = (type: string, item?: {}) => {
@@ -85,6 +122,19 @@ const addPatient = (type: string, item?: {}) => {
   // 打开弹窗
   addEditPatientRef.value?.openPopup(type, item)
 }
+
+// 点击下一步
+const onNext = () => {
+  useStore.setPatientId(selectPatientId.value)
+  // go to pay page
+  router.push({
+    path: '/consult/pay'
+  })
+}
+
+// 是否为咨询页面跳转过来的
+const isChange = computed(() => route.query.isChange === '1')
+
 onMounted(() => {
   // 获取患者列表数据
   getPatientData()
@@ -93,8 +143,26 @@ onMounted(() => {
 
 <style scoped lang="scss">
 .patient-page {
+  .next-area {
+    padding: 16px 16px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    box-sizing: border-box;
+    border-top: 1px solid #f5f5f5;
+  }
   .family-list-container {
     padding: 16px;
+    .select-patient {
+      p {
+        font-size: 16px;
+        font-weight: bold;
+      }
+      span {
+        font-size: 14px;
+        color: var(--cp-tag);
+      }
+    }
     .famliy-list-limit {
       font-size: 14px;
       color: var(--cp-text2);
@@ -109,6 +177,9 @@ onMounted(() => {
       align-items: center;
       justify-content: space-between;
       width: 100%;
+      &.active {
+        border: 1px solid var(--cp-primary);
+      }
       .family-list-item-left {
         .family-list-item-left-userinfo {
           display: flex;
