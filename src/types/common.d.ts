@@ -14,4 +14,3 @@ export type FollowParams = {
   // id
   id: string
 }
-
