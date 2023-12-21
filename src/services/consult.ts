@@ -1,5 +1,10 @@
 // 请求库
-import type { AllCate, OrderPre, orderPreParams,PayOrderParams } from '@/types/consult'
+import type {
+  AllCate,
+  OrderPre,
+  orderPreParams,
+  PayOrderParams
+} from '@/types/consult'
 import request from '@/utils/request'
 
 // 找医生--查询所有科室-层级
@@ -13,6 +18,6 @@ export function getOrderPreData(params: orderPreParams) {
 }
 
 // 订单-支付接口
-export function payOrderData(data: PayOrderParams){
-  return request<{payUrl:string}>('/patient/consult/pay','post',data)
+export function payOrderData(data: PayOrderParams) {
+  return request<{ payUrl: string }>('/patient/consult/pay', 'post', data)
 }

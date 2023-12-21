@@ -35,7 +35,7 @@
             <div class="pay-price">¥{{ orderpre?.actualPayment }}</div>
           </template>
         </van-cell>
-        <van-cell title="病情描述" label="描述信息" />
+        <van-cell title="病情描述" :label="useStore.consultData.illnessDesc" />
       </van-cell-group>
       <!-- 支付协议 -->
       <div class="pay-agreement">
@@ -75,7 +75,12 @@
           </van-cell>
         </van-cell-group>
         <div class="btn">
-          <van-button type="primary" round block @click="payOrder"
+          <van-button
+            type="primary"
+            :loading="payLoading"
+            round
+            block
+            @click="payOrder"
             >立即支付</van-button
           >
         </div>
@@ -190,13 +195,14 @@ const payOrder = async () => {
     showToast('暂不支持微信支付!')
     return
   }
+  payLoading.value = true
   let params: PayOrderParams = {
     orderId: orderId.value,
     paymentMethod: payType.value,
-    payCallback: 'http://localhost:5173/room'
+    payCallback: 'http://192.168.3.33:5173/room'
   }
   const res = await payOrderData(params)
-  console.log(res)
+  payLoading.value = false
   window.location.href = res.data.payUrl
 }
 // 判断订单是否生成过订单号

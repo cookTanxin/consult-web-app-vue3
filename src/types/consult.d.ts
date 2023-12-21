@@ -1,4 +1,4 @@
-import type { ConsultType, IllnessTime,payType } from '@/enums'
+import type { ConsultType, IllnessTime, payType } from '@/enums'
 
 // 科室类型数据
 type Child = {
@@ -59,7 +59,6 @@ type IllnessFormData = Pick<
   'illnessDesc' | 'illnessTime' | 'consultFlag' | 'pictures'
 >
 
-
 // 响应数据类型 类型数据
 type OrderPre = {
   // 1问医生2极速问诊2开药问诊--默认是1
@@ -86,10 +85,9 @@ interface PayOrderParams {
   // 支付方式0微信支付，1支付宝2云闪付
   paymentMethod: payType
   // 订单id
-  orderId:string
+  orderId: string
   // 回调地址
   payCallback: string
-
 }
 
 export {

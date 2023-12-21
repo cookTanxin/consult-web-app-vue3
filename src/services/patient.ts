@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 类型
 import type { Patient, PatientFormData } from '@/types/patient'
 // type
-import type {PartialConsult} from '@/types/consult'
+import type { PartialConsult } from '@/types/consult'
 
 // 问诊-查询患者列表信息
 export function getPatientListdata() {
@@ -31,6 +31,6 @@ export function queryPatientInfo(id: string) {
 }
 
 // 问诊-保存/修改问诊订单 创建订单号
-export function createOrderId(data:PartialConsult) {
-  return request<{id:string}>('/patient/consult/order','post',data)
+export function createOrderId(data: PartialConsult) {
+  return request<{ id: string }>('/patient/consult/order', 'post', data)
 }
