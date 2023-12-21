@@ -22,3 +22,9 @@ export function updatePatient(data: any) {
 export function deletePatient(id: string) {
   return request(`/patient/del/${id}`, 'delete')
 }
+
+// 问诊-查询患者详情
+export function queryPatientInfo(id:string){
+  return request<Patient>(`/patient/info/${id}`)
+}
+

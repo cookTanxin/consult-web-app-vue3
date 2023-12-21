@@ -59,4 +59,25 @@ type IllnessFormData = Pick<
   'illnessDesc' | 'illnessTime' | 'consultFlag' | 'pictures'
 >
 
-export { Child, AllCate, PartialConsult, IllnessFormData }
+// 响应数据类型 类型数据
+type OrderPre = {
+  // 1问医生2极速问诊2开药问诊--默认是1
+  type:ConsultType
+  // 极速问诊类型：0普通1三甲,极速问题必须有值
+  illnessType: 0 | 1
+  // 应付款/价格-图文或者极速的费用，极速普通10元，三甲39元
+  payment: 10 | 39
+  // 积分可抵扣
+  pointDeduction:number
+  // 优惠券抵扣
+  couponDeduction:number
+  // 使用的优惠券id-使用优惠券时，返回
+  couponId:string
+  // 实付金额
+  actualPayment: number
+}
+
+// 预支付请求参数 类型
+type orderPreParams = Pick<PartialConsult,'type' | 'illnessType'>
+
+export { Child, AllCate, PartialConsult, IllnessFormData,Image,OrderPre,orderPreParams }

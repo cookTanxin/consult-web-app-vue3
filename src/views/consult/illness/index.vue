@@ -81,9 +81,9 @@
 
 <script setup lang="ts">
 // vue
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 // vant
-import { showToast } from 'vant'
+import { showToast, showConfirmDialog } from 'vant'
 import type {
   UploaderAfterRead,
   UploaderFileListItem
@@ -91,7 +91,7 @@ import type {
 // 枚举
 import { IllnessTime } from '@/enums/index'
 // 类型
-import type { IllnessFormData } from '@/types/consult'
+import type { IllnessFormData, Image } from '@/types/consult'
 // api
 import { uploadFile } from '@/services/public'
 // store
@@ -115,7 +115,7 @@ const consultFlagOptions = [
   { name: '就诊过', value: 1 }
 ]
 // 上传图片数据
-const uploadFiles = ref([])
+const uploadFiles = ref<Image[]>()
 // 提交表单数据 需要初始变量啊！！！！
 const submitData = ref<IllnessFormData>({
   illnessDesc: '',
@@ -179,6 +179,32 @@ const onSubmit = () => {
     }
   })
 }
+// 判断之前用户是否填写信息 如果填写了 询问用户是否回填
+const checkUserFormData = () => {
+  if (useStore.consultData.illnessDesc) {
+    showConfirmDialog({
+      title: '温馨提示',
+      message: '是否恢复之前填写的信息？',
+      closeOnPopstate: false
+    })
+      .then(() => {
+        const { illnessDesc, illnessTime, consultFlag, pictures } =
+          useStore.consultData
+        submitData.value = { illnessDesc, illnessTime, consultFlag, pictures }
+        uploadFiles.value = pictures || []
+      })
+      .catch(() => {
+        router.push({
+          path: '/'
+        })
+        useStore.clearConsultFormData()
+      })
+  }
+}
+onMounted(() => {
+  // 判断用户之前是否填写信息
+  checkUserFormData()
+})
 </script>
 
 <style scoped lang="scss">

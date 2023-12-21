@@ -42,7 +42,10 @@
               <span class="age">{{ item.age }}</span>
             </div>
           </div>
-          <div class="family-list-item-right" @click="addPatient('edit', item)">
+          <div
+            class="family-list-item-right"
+            @click.stop="addPatient('edit', item)"
+          >
             <c-icon iconname="user-edit"></c-icon>
           </div>
         </div>
@@ -115,7 +118,7 @@ const getPatientData = async () => {
 // 添加患者
 const addPatient = (type: string, item?: {}) => {
   // 判断是否能添加
-  if (patientList.value.length >= 6) {
+  if (patientList.value.length >= 6 && type === 'add') {
     showToast('只能添加6位哦！')
     return
   }
@@ -143,6 +146,9 @@ onMounted(() => {
 
 <style scoped lang="scss">
 .patient-page {
+  .patient-list {
+    margin-bottom: 80px;
+  }
   .next-area {
     padding: 16px 16px;
     position: fixed;
@@ -150,6 +156,7 @@ onMounted(() => {
     width: 100%;
     box-sizing: border-box;
     border-top: 1px solid #f5f5f5;
+    background-color: #fff;
   }
   .family-list-container {
     padding: 16px;

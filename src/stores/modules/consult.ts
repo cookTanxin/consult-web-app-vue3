@@ -36,13 +36,23 @@ const useConsult = defineStore(
     const setPatientId = (id: string) => {
       consultData.value.patientId = id
     }
+    // 清空表单信息
+    const clearConsultFormData = () => {
+      consultData.value = {}
+    }
+    // 设置优惠卷id
+    const setcouponId = (id:string) =>{
+      consultData.value.couponId = id
+    }
     return {
       setType,
       setillnessType,
       consultData,
       setdepId,
       setIllnessFormData,
-      setPatientId
+      setPatientId,
+      clearConsultFormData,
+      setcouponId
     }
   },
   {
