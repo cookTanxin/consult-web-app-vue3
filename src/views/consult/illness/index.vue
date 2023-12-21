@@ -161,7 +161,7 @@ const onSubmit = () => {
     showToast('请输入病情')
     return
   }
-  if (!submitData.value.illnessTime) {
+  if (submitData.value.illnessTime === undefined) {
     showToast('请选择患病时间')
     return
   }
