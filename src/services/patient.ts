@@ -24,7 +24,6 @@ export function deletePatient(id: string) {
 }
 
 // 问诊-查询患者详情
-export function queryPatientInfo(id:string){
+export function queryPatientInfo(id: string) {
   return request<Patient>(`/patient/info/${id}`)
 }
-

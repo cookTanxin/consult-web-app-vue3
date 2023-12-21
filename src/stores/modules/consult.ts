@@ -41,7 +41,7 @@ const useConsult = defineStore(
       consultData.value = {}
     }
     // 设置优惠卷id
-    const setcouponId = (id:string) =>{
+    const setcouponId = (id: string) => {
       consultData.value.couponId = id
     }
     return {
