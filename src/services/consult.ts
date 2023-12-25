@@ -6,6 +6,7 @@ import type {
   PayOrderParams
 } from '@/types/consult'
 import request from '@/utils/request'
+import type { ConsultOrderItem } from '@/types/room'
 
 // 找医生--查询所有科室-层级
 export function getAllCate() {
@@ -20,4 +21,11 @@ export function getOrderPreData(params: orderPreParams) {
 // 订单-支付接口
 export function payOrderData(data: PayOrderParams) {
   return request<{ payUrl: string }>('/patient/consult/pay', 'post', data)
+}
+
+// 获取问诊订单详情
+export function getOrderDetail(orderId: string) {
+  return request<ConsultOrderItem>('/patient/consult/order/detail', 'get', {
+    orderId
+  })
 }

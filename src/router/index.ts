@@ -78,7 +78,7 @@ const router = createRouter({
       meta: { title: '问诊室' },
       component: () => import('@/views/room/index.vue'),
       // 路由独享钩子函数
-      beforeEnter: (to, from) => {
+      beforeEnter: (to) => {
         // 判断是否支付成功
         if (to.query.payResult === 'false') {
           showToast('没有支付成功哦!')

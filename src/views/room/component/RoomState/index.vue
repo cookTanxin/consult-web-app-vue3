@@ -1,16 +1,36 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { OrderType } from '@/enums'
+
+interface Props {
+  status?: OrderType
+  countdown?: number
+}
+defineProps<Props>()
+</script>
 
 <template>
   <div class="room-status">
     <!-- 等待状态 -->
-    <div class="wait">已通知医生尽快接诊，24小时内医生未回复将自动退款</div>
-    <!-- 咨询中 -->
-    <!-- <div class="chat">
+    <div class="wait" v-if="status === OrderType.ConsultWait">
+      已通知医生尽快接诊，24小时内医生未回复将自动退款
+    </div>
+    <!--咨询中 -->
+    <div class="chat" v-if="status === OrderType.ConsultChat">
       <span>咨询中</span>
-      <span>剩余时间：23:10:34</span>
-    </div> -->
+      <span style="display: flex"
+        >剩余时间：<van-count-down
+          millisecond
+          :time="countdown * 1000"
+          format="HH:mm:ss"
+      /></span>
+    </div>
     <!-- 已结束 -->
-    <!-- <div class="end"><van-icon name="passed" /> 已结束</div> -->
+    <div
+      class="end"
+      v-if="status === (OrderType.ConsultCancel || OrderType.ConsultComplete)"
+    >
+      <van-icon name="passed" /> 已结束
+    </div>
   </div>
 </template>
 

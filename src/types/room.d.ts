@@ -1,6 +1,7 @@
-import { PrescriptionStatus, MsgType } from '@/enums'
+import { PrescriptionStatus, MsgType, OrderType } from '@/enums'
 import type { Image, Consult } from '@/types/consult'
 import type { Patient } from '@/types/patient'
+import type { Doctor } from '@/types/home'
 export type Medical = {
   /** 药品ID */
   id: string
@@ -100,4 +101,36 @@ export type TimeMessages = {
   orderId: string
   /** 会话ID */
   sid: string
+}
+
+// 问诊订单单项信息
+export type ConsultOrderItem = Consult & {
+  /** 创建时间 */
+  createTime: string
+  /** 医生信息 */
+  docInfo?: Doctor
+  /** 患者信息 */
+  patientInfo: Patient
+  /** 订单编号 */
+  orderNo: string
+  /** 订单状态 */
+  status: OrderType
+  /** 状态文字 */
+  statusValue: string
+  /** 类型问诊文字 */
+  typeValue: string
+  /** 倒计时时间 */
+  countdown: number
+  /** 处方ID */
+  prescriptionId?: string
+  /** 评价ID */
+  evaluateId: number
+  /** 应付款 */
+  payment: number
+  /** 优惠券抵扣 */
+  couponDeduction: number
+  /** 积分抵扣 */
+  pointDeduction: number
+  /** 实付款 */
+  actualPayment: number
 }
