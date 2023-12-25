@@ -8,10 +8,12 @@ import { useUserStore } from '@/stores/index'
 import { showToast } from 'vant'
 // router
 import router from '@/router'
+// base url
+import { baseURL } from '@/config/index'
 // 实例化axios
 const instance = axios.create({
   // 基础地址
-  baseURL: 'https://consult-api.itheima.net',
+  baseURL,
   // 请求超时时间
   timeout: 5000
 })

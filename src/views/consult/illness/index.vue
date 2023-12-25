@@ -82,14 +82,14 @@
 <script setup lang="ts">
 // vue
 import { ref, computed, onMounted } from 'vue'
+// config
+import { illnessTimeOptions, consultFlagOptions } from '@/config'
 // vant
 import { showToast, showConfirmDialog } from 'vant'
 import type {
   UploaderAfterRead,
   UploaderFileListItem
 } from 'vant/lib/uploader/types'
-// 枚举
-import { IllnessTime } from '@/enums/index'
 // 类型
 import type { IllnessFormData, Image } from '@/types/consult'
 // api
@@ -102,18 +102,6 @@ import { useRouter } from 'vue-router'
 const useStore = useConsult()
 // router
 const router = useRouter()
-// 患病时间1一周内2一月内3半年内4半年以上
-const illnessTimeOptions = [
-  { name: '一周内', value: IllnessTime.Week },
-  { name: '一月内', value: IllnessTime.Month },
-  { name: '半年内', value: IllnessTime.HalfYear },
-  { name: '半年以上', value: IllnessTime.More }
-]
-// 找医生/极速问诊-是否就诊过0未就诊1就诊过
-const consultFlagOptions = [
-  { name: '未就诊', value: 0 },
-  { name: '就诊过', value: 1 }
-]
 // 上传图片数据
 const uploadFiles = ref<Image[]>()
 // 提交表单数据 需要初始变量啊！！！！

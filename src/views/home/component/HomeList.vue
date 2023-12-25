@@ -8,7 +8,7 @@ import ListItem from './ListItem.vue'
 // types
 import type { LikeComType } from './types/likecom'
 // types
-import type { KnowledgeList, HomeTabType } from '@/types/home'
+import type { KnowledgeList } from '@/types/home'
 // api
 import { getHomeListData } from '@/services/home'
 // ref
@@ -27,7 +27,7 @@ const pageSize = ref(10)
 const homeListData = ref<KnowledgeList>([])
 // 子组件属性
 type Props = {
-  type: HomeTabType
+  type: string
 }
 const props = defineProps<Props>()
 // 下拉刷新

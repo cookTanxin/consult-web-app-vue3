@@ -6,7 +6,7 @@ export type HomeTabType = 'like' | 'recommend' | 'fatReduction' | 'food'
 // 首页列表查询参数
 export type HomeListParams = ParamsPage & {
   // 文章类型
-  type: HomeTabType
+  type: string
 }
 
 // 文章列表信息类型
