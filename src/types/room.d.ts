@@ -46,6 +46,7 @@ export type Prescription = {
   medicines: Medical[]
 }
 
+// 评价数据
 export type EvaluateDoc = {
   /** 评价ID */
   id?: string

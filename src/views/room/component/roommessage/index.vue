@@ -2,6 +2,8 @@
 import type { Message } from '@/types/room'
 import { MsgType } from '@/enums'
 import { showImagePreview, showToast } from 'vant'
+// 评价组件
+import commentCard from '../EvaluateCard/index.vue'
 // config
 import { consultFlagOptions, illnessTimeOptions } from '@/config'
 // store
@@ -81,7 +83,7 @@ const showPatientImg = (imgs) => {
     v-if="item.msgType === MsgType.NotifyCancel"
   >
     <div class="content">
-      <span>订单取消</span>
+      <span>{{ item.msg.content }}</span>
     </div>
   </div>
   <!-- 发送文字 -->
@@ -152,6 +154,12 @@ const showPatientImg = (imgs) => {
     </div>
   </div>
   <!-- 评价卡片，后期实现 -->
+  <commentCard
+    v-if="
+      item.msgType === MsgType.CardEvaForm || item.msgType === MsgType.CardEva
+    "
+    :evaluate-doc="item.msg.evaluateDoc"
+  ></commentCard>
 </template>
 
 <style lang="scss" scoped>

@@ -32,7 +32,7 @@
 
 <script setup lang="ts">
 // vue
-import { nextTick, onMounted, onUnmounted, ref } from 'vue'
+import { nextTick, onMounted, onUnmounted, provide, ref } from 'vue'
 // socket
 import io, { Socket } from 'socket.io-client'
 // route
@@ -51,6 +51,7 @@ import type { ConsultOrderItem, Message, TimeMessages } from '@/types/room'
 import { MsgType } from '@/enums'
 import { getOrderDetail } from '@/services/consult'
 import type { Image } from '@/types/consult'
+import { showLoadingToast, showToast } from 'vant'
 // store
 const userStore = useUserStore()
 // 订单详情数据
@@ -59,6 +60,24 @@ const orderDetailInfo = ref<ConsultOrderItem>({})
 const route = useRoute()
 // 问诊消息数据
 const messageList = ref<Message[]>([])
+// 评价以后更新评价数据的评分数据
+const changeCommentData = (score: number) => {
+  // 找到msgtype 为
+  let commentCard = messageList.value.find(
+    (item) => item.msgType === MsgType.CardEvaForm
+  )
+  if (commentCard) {
+    commentCard.msg.evaluateDoc = { score }
+    commentCard.msgType = MsgType.CardEva
+    showToast('感谢您的评价')
+  }
+}
+// 多级组件传递参数 使用 provide inject  provide 提供 inject 投入 注入
+provide('orderDetailInfo', orderDetailInfo)
+// provide 注入方法
+provide('changeCommentData', changeCommentData)
+// provide 和 inject 也可以传递方法给子级组件使用
+
 // socket
 let socket: Socket
 // 创建链接
@@ -85,7 +104,11 @@ const connectSocket = () => {
     console.log(err)
   })
   // 获取默认聊天记录
-  socket.on('chatMsgList', ({ data }) => {
+  socket.on('chatMsgList', async ({ data }) => {
+    showLoadingToast({
+      duration: 2000,
+      message: '加载中'
+    })
     console.log(data)
     let arr: Message[] = []
     data.forEach((item: TimeMessages) => {
@@ -101,6 +124,10 @@ const connectSocket = () => {
     })
     // 聊天数据
     messageList.value.unshift(...arr)
+    // 滚动到最底部
+    await nextTick()
+    // 滚动到最底部
+    window.scroll(0, document.body.scrollHeight)
   })
   // 监听问诊状态的改变 列入医生接单以后 更新详情
   socket.on('statusChange', () => {
@@ -109,7 +136,9 @@ const connectSocket = () => {
   })
   // 聊天-接收对话信息
   socket.on('receiveChatMsg', async (msg) => {
+    // 消息列表数据
     messageList.value.push(msg)
+    // dom 更新完成以后
     await nextTick()
     // 每次接收到消息 消息直接置底
     window.scroll(0, document.body.scrollHeight)
@@ -165,7 +194,12 @@ onUnmounted(() => {
 
 <style scoped lang="scss">
 .room-page {
+  height: 100vh;
   background-color: #f5f5f5;
+  .inner-room {
+    flex: 1;
+    background-color: #f5f5f5;
+  }
   .consult-room-message {
     padding-bottom: 60px;
   }

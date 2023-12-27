@@ -41,6 +41,9 @@ const onAfterRead: UploaderAfterRead = async (item) => {
 const onOversize = () => {
   showToast('图片太大了,缩小图片哦！')
 }
+const onfocus = () => {
+  window.scroll(0, document.body.scrollHeight)
+}
 </script>
 
 <template>
@@ -53,6 +56,7 @@ const onOversize = () => {
       placeholder="问医生"
       autocomplete="off"
       @keyup.enter="sendMessage"
+      @click-input="onfocus"
       :disabled="status != OrderType.ConsultChat"
     ></van-field>
     <van-uploader

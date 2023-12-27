@@ -27,7 +27,10 @@ defineProps<Props>()
     <!-- 已结束 -->
     <div
       class="end"
-      v-if="status === (OrderType.ConsultCancel || OrderType.ConsultComplete)"
+      v-if="
+        status === OrderType.ConsultCancel ||
+        status === OrderType.ConsultComplete
+      "
     >
       <van-icon name="passed" /> 已结束
     </div>
