@@ -1,3 +1,8 @@
+import type { ParamsPage } from '@/types/common'
+import { ConsultType, OrderType } from '@/enums'
+import type { Patient } from '@/types/patient'
+import type { Doctor } from '@/types/home'
+
 export type User = {
   // 令牌
   token: string
@@ -13,6 +18,54 @@ export type User = {
   id: string
 }
 
+// 获取用户问诊列表数据 请求参数类型
+export type getConsultParams = ParamsPage & {
+  // 列表类型
+  type: ConsultType
+}
+
+export interface OrderConsultItem {
+  // 订单id
+  id: string
+  // 订单编号
+  orderNo: string
+  // 订单类型1问医生2极速问诊2开药问诊--默认是1
+  type: number
+  // 订单创建时间
+  createTime: string
+  // 患者信息
+  patientInfo: Patient
+  // 病情--症状描述
+  illnessDesc: string
+  // 找医生/极速问诊必有-患病时间1一周内2一月内3半年内4半年以上
+  illnessTime: number
+  // 咨询的医生--找医生
+  docInfo: Doctor
+  // 处方id信息
+  prescriptionId: string
+  // 就诊记录id信息
+  recordId: string
+  // 订单状态：图文问诊或者开药问诊的订单-1待支付2待接诊3咨询中4已完成5已取消/药品订单-10待支付11待发货12待收货13已完成14已取消
+  status: OrderType
+  // 订单状态：图文问诊或者开药问诊的订单-1待支付2待接诊3咨询中4已完成5已取消/药品订单-10待支付11待发货12待收货13已完成14已取消
+  statusValue: string
+  // 倒计时
+  countdown: number
+  // 是否已经评价1 已评价0 未评价
+  evaluateFlag: string
+  // 价格
+  payment: number
+}
+
+// 问诊列表响应数据类型
+export interface ConsultListItem {
+  // 总条数
+  total: number
+  // 总页数
+  pageTotal: number
+  // 列表数据
+  rows: OrderConsultItem[]
+}
 // 关注类型 联合类型 topic百科话题,knowledge百科文章,doc医生,disease疾病
 export type followType = 'topic' | 'knowledge' | 'doc' | 'disease'
 
