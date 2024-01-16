@@ -1,7 +1,7 @@
 // vue-router
 import { createRouter, createWebHistory } from 'vue-router'
 // 路由白名单
-import { withRouter, appName } from '@/config'
+import { withRouter } from '@/config'
 // store
 import { useUserStore } from '@/stores'
 // 加载进度条
@@ -141,7 +141,9 @@ router.beforeEach((to, from) => {
 // 全局路由守卫 后置
 router.afterEach((to) => {
   // 设置页面标题 类型断言
-  document.title = `${appName}-${to.meta.title as string}`
+  document.title = `${import.meta.env.VITE_APP_TITLE}-${
+    to.meta.title as string
+  }`
   // 进度条结束
   NProgress.done()
 })

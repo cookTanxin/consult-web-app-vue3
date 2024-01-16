@@ -7,7 +7,10 @@ import 'virtual:svg-icons-register'
 import pinia from '@/stores/index'
 // 移动端调试工具
 import eruda from 'eruda'
-eruda.init()
+// 判断是否为开发环境
+if (import.meta.env.DEV) {
+  eruda.init()
+}
 // vant 样式
 import 'vant/lib/index.css'
 // style
@@ -17,5 +20,7 @@ const app = createApp(App)
 
 app.use(pinia)
 app.use(router)
+
+console.log(import.meta.env.VITE_APP_TITLE)
 
 app.mount('#app')

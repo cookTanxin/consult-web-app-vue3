@@ -199,7 +199,7 @@ const payOrder = async () => {
   let params: PayOrderParams = {
     orderId: orderId.value,
     paymentMethod: payType.value,
-    payCallback: 'http://192.168.3.33:5173/room'
+    payCallback: import.meta.env.VITE_APP_CALLBACK + '/room'
   }
   const res = await payOrderData(params)
   payLoading.value = false

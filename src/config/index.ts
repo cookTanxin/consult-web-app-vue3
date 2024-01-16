@@ -2,8 +2,6 @@
 import { IllnessTime } from '@/enums'
 // 路由白名单
 const withRouter = ['/login']
-// app 名称
-const appName = '庸医问诊'
 // 我的快捷工具链接数据
 const toolUrlList = [
   { label: '我的问诊', path: '/user/consult' },
@@ -40,7 +38,6 @@ const baseURL = 'https://consult-api.itheima.net'
 
 export {
   withRouter,
-  appName,
   toolUrlList,
   homeTabs,
   baseURL,

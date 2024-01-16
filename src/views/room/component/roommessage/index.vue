@@ -8,6 +8,7 @@ import commentCard from '../EvaluateCard/index.vue'
 import { consultFlagOptions, illnessTimeOptions } from '@/config'
 // store
 import { useUserStore } from '@/stores'
+import type { Image } from '@/types/consult'
 // 全局用户数据
 const userStore = useUserStore()
 // type
@@ -30,9 +31,9 @@ const consultFlagFilter = (flag: 0 | 1) => {
   }
 }
 // 查看图片
-const showPatientImg = (imgs) => {
+const showPatientImg = (imgs: any) => {
   if (imgs && imgs.length) {
-    showImagePreview(imgs.map((item) => item.url))
+    showImagePreview(imgs.map((item: any) => item.url))
   } else {
     showToast('没有图片！')
   }

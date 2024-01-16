@@ -3,7 +3,7 @@ import { OrderType } from '@/enums'
 
 interface Props {
   status?: OrderType
-  countdown?: number
+  countdown: number
 }
 defineProps<Props>()
 </script>
